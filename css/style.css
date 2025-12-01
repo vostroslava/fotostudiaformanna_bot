@@ -4,29 +4,29 @@
     --primary: #ff9aad;
     --primary-light: #ffb3c3;
     --primary-dark: #ff7a93;
-    
+
     --secondary: #ffd4dd;
     --accent: #ffebef;
-    
+
     /* Фон - нежные оттенки */
     --bg-main: #fff5f7;
     --bg-card: #ffffff;
     --bg-overlay: rgba(255, 255, 255, 0.95);
-    
+
     /* Текст */
     --text-primary: #4a4a4a;
     --text-secondary: #7a7a7a;
     --text-light: #9a9a9a;
-    
+
     /* Тени */
     --shadow-sm: 0 2px 8px rgba(255, 154, 173, 0.1);
     --shadow-md: 0 4px 16px rgba(255, 154, 173, 0.15);
     --shadow-lg: 0 8px 24px rgba(255, 154, 173, 0.2);
-    
+
     /* Градиенты */
     --gradient-romantic: linear-gradient(135deg, #ff9aad 0%, #ffd4dd 100%);
     --gradient-soft: linear-gradient(135deg, #ffebef 0%, #ffffff 100%);
-    
+
     /* Размеры */
     --border-radius: 20px;
     --spacing-sm: 12px;
@@ -135,55 +135,224 @@ body {
 .location-card {
     background: var(--bg-card);
     border-radius: var(--border-radius);
-    padding: var(--spacing-md);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-sm);
-    border: 2px solid transparent;
+    height: 300px;
+    /* Фиксированная высота для фото */
     position: relative;
     overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: var(--shadow-sm);
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
-.location-card::before {
+.location-card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+    z-index: 1;
+}
+
+.location-card::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--gradient-romantic);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.8) 100%);
+    z-index: 2;
 }
 
-.location-card:hover::before {
-    transform: scaleX(1);
+.location-card:hover .location-card-bg {
+    transform: scale(1.1);
 }
 
 .location-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
-    border-color: var(--primary-light);
+}
+
+.location-content {
+    position: relative;
+    z-index: 3;
+    padding: var(--spacing-md);
+    color: white;
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+}
+
+.location-card:hover .location-content {
+    transform: translateY(0);
 }
 
 .location-icon {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-sm);
+    font-size: 2rem;
+    margin-bottom: 8px;
     display: block;
-    filter: drop-shadow(0 2px 4px rgba(255, 154, 173, 0.2));
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .location-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .location-description {
     font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.4;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    max-height: 0;
+}
+
+.location-card:hover .location-description {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 100px;
+}
+
+/* Модальное окно тура */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.tour-container {
+    width: 90%;
+    max-width: 1000px;
+    background: transparent;
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.tour-slide {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.tour-slide.active {
+    display: block;
+}
+
+.tour-image-container {
+    width: 100%;
+    height: 60vh;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.tour-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tour-info {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    margin-top: -40px;
+    position: relative;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+}
+
+.tour-title {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.tour-desc {
     color: var(--text-secondary);
-    line-height: 1.5;
+}
+
+.tour-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.tour-nav-btn:hover {
+    background: white;
+    color: var(--primary);
+}
+
+.tour-prev {
+    left: 20px;
+}
+
+.tour-next {
+    right: 20px;
+}
+
+.tour-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.tour-close:hover {
+    background: var(--primary);
+    transform: rotate(90deg);
 }
 
 /* Кнопки */
@@ -355,19 +524,19 @@ body {
     .studio-title {
         font-size: 1.5rem;
     }
-    
+
     .studio-subtitle {
         font-size: 1rem;
     }
-    
+
     .locations-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .section-title {
         font-size: 1.5rem;
     }
-    
+
     .btn {
         width: 100%;
     }

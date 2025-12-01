@@ -5,6 +5,7 @@ class PhotoStudioApp {
         this.currentLocation = null;
         this.currentType = null;
         this.uploadedPhoto = null;
+        this.currentSlide = 0;
 
         this.init();
     }
@@ -12,6 +13,7 @@ class PhotoStudioApp {
     init() {
         this.showWelcome();
         this.setupEventListeners();
+        this.initTour();
     }
 
     setupEventListeners() {
@@ -19,6 +21,16 @@ class PhotoStudioApp {
         const fileInput = document.getElementById('photoInput');
         if (fileInput) {
             fileInput.addEventListener('change', (e) => this.handlePhotoUpload(e));
+        }
+
+        // Закрытие модального окна по клику на фон
+        const modal = document.getElementById('tour-modal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeTour();
+                }
+            });
         }
     }
 
@@ -194,6 +206,59 @@ class PhotoStudioApp {
         // Сбросить input
         const fileInput = document.getElementById('photoInput');
         if (fileInput) fileInput.value = '';
+    }
+
+    // --- TOUR LOGIC ---
+
+    initTour() {
+        const slidesContainer = document.getElementById('tour-slides');
+        if (!slidesContainer) return;
+
+        MESSAGES.tour.locations.forEach((loc, index) => {
+            const slide = document.createElement('div');
+            slide.className = `tour-slide ${index === 0 ? 'active' : ''}`;
+            slide.innerHTML = `
+                <div class="tour-image-container">
+                    <img src="${loc.image}" class="tour-image" alt="${loc.name}">
+                </div>
+                <div class="tour-info">
+                    <h3 class="tour-title">${loc.name}</h3>
+                    <p class="tour-desc">${loc.description}</p>
+                </div>
+            `;
+            slidesContainer.appendChild(slide);
+        });
+    }
+
+    openTour() {
+        document.getElementById('tour-modal').classList.add('active');
+        this.currentSlide = 0;
+        this.updateSlides();
+    }
+
+    closeTour() {
+        document.getElementById('tour-modal').classList.remove('active');
+    }
+
+    nextSlide() {
+        this.currentSlide = (this.currentSlide + 1) % MESSAGES.tour.locations.length;
+        this.updateSlides();
+    }
+
+    prevSlide() {
+        this.currentSlide = (this.currentSlide - 1 + MESSAGES.tour.locations.length) % MESSAGES.tour.locations.length;
+        this.updateSlides();
+    }
+
+    updateSlides() {
+        const slides = document.querySelectorAll('.tour-slide');
+        slides.forEach((slide, index) => {
+            if (index === this.currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
     }
 }
 

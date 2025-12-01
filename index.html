@@ -1,78 +1,113 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Маленькая персональная фотостудия - романтический подарок от Славы">
     <title>Персональная фотостудия 📸</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animations.css">
 </head>
+
 <body>
     <div class="app-container">
-        
+
         <!-- Заголовок студии -->
         <header class="studio-header">
             <div class="studio-logo">📸</div>
             <h1 class="studio-title">Персональная фотостудия</h1>
         </header>
-        
+
         <!-- Приветственная секция -->
         <section id="welcome-section" class="content-section">
             <div class="card text-center">
                 <h2 class="section-title" id="welcome-title"></h2>
                 <p class="section-text" id="welcome-text"></p>
+                <button class="btn btn-primary animate-bounce-in" onclick="app.openTour()">
+                    🎬 Посмотреть все локации студии
+                </button>
             </div>
-            
+
             <div class="locations-grid">
+                <!-- Карточки теперь генерируются через JS для удобства -->
                 <div class="location-card stagger-item" onclick="app.openLocation('portrait')">
-                    <span class="location-icon">📸</span>
-                    <h3 class="location-title" id="loc-portrait-title"></h3>
-                    <p class="location-description" id="loc-portrait-desc"></p>
+                    <div class="location-card-bg" style="background-image: url('assets/images/tea-corner.jpg')"></div>
+                    <div class="location-content">
+                        <span class="location-icon">☕</span>
+                        <h3 class="location-title" id="loc-portrait-title"></h3>
+                        <p class="location-description" id="loc-portrait-desc"></p>
+                    </div>
                 </div>
-                
+
                 <div class="location-card stagger-item" onclick="app.openLocation('organizer')">
-                    <span class="location-icon">🎯</span>
-                    <h3 class="location-title" id="loc-organizer-title"></h3>
-                    <p class="location-description" id="loc-organizer-desc"></p>
+                    <div class="location-card-bg" style="background-image: url('assets/images/phone-studio.jpg')"></div>
+                    <div class="location-content">
+                        <span class="location-icon">📱</span>
+                        <h3 class="location-title" id="loc-organizer-title"></h3>
+                        <p class="location-description" id="loc-organizer-desc"></p>
+                    </div>
                 </div>
-                
+
                 <div class="location-card stagger-item" onclick="app.openLocation('wedding')">
-                    <span class="location-icon">💍</span>
-                    <h3 class="location-title" id="loc-wedding-title"></h3>
-                    <p class="location-description" id="loc-wedding-desc"></p>
+                    <div class="location-card-bg" style="background-image: url('assets/images/wedding-terrace.jpg')">
+                    </div>
+                    <div class="location-content">
+                        <span class="location-icon">💍</span>
+                        <h3 class="location-title" id="loc-wedding-title"></h3>
+                        <p class="location-description" id="loc-wedding-desc"></p>
+                    </div>
                 </div>
-                
+
                 <div class="location-card stagger-item" onclick="app.openLocation('compliment')">
-                    <span class="location-icon">✨</span>
-                    <h3 class="location-title" id="loc-compliment-title"></h3>
-                    <p class="location-description" id="loc-compliment-desc"></p>
+                    <div class="location-card-bg" style="background-image: url('assets/images/dawn-studio.jpg')"></div>
+                    <div class="location-content">
+                        <span class="location-icon">🌅</span>
+                        <h3 class="location-title" id="loc-compliment-title"></h3>
+                        <p class="location-description" id="loc-compliment-desc"></p>
+                    </div>
                 </div>
             </div>
-            
+
             <div class="studio-footer">
                 <p id="welcome-footer"></p>
             </div>
         </section>
-        
+
+        <!-- MODAL TOUR -->
+        <div id="tour-modal" class="modal-overlay">
+            <div class="tour-container">
+                <button class="tour-close" onclick="app.closeTour()">✕</button>
+
+                <div id="tour-slides">
+                    <!-- Slides generated by JS -->
+                </div>
+
+                <button class="tour-nav-btn tour-prev" onclick="app.prevSlide()">←</button>
+                <button class="tour-nav-btn tour-next" onclick="app.nextSlide()">→</button>
+            </div>
+        </div>
+
         <!-- ПОРТРЕТНАЯ ЗОНА -->
         <section id="portrait-section" class="content-section hidden">
             <button class="back-button" onclick="app.backToStudio()">
                 ← Вернуться в студию
             </button>
-            
+
             <!-- Выбор типа портрета -->
             <div id="portrait-question" class="card">
                 <h2 class="section-title">Портрет для себя</h2>
                 <p class="section-text" id="portrait-question-text"></p>
-                
+
                 <div class="btn-group">
                     <button class="btn btn-primary" onclick="app.selectPortraitType('gentle')">
                         Нежный
@@ -85,17 +120,17 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Подсказки -->
             <div id="portrait-tips" class="card hidden">
                 <h2 class="section-title">Подсказки для съёмки</h2>
                 <p class="section-text" id="portrait-tips-text"></p>
-                
+
                 <button class="btn btn-primary" onclick="app.showPortraitUpload()">
                     📤 Готова загрузить фото
                 </button>
             </div>
-            
+
             <!-- Загрузка фото -->
             <div id="portrait-upload" class="card hidden">
                 <div class="upload-area" onclick="app.triggerFileUpload()">
@@ -103,15 +138,15 @@
                     <p class="upload-text">Нажми, чтобы выбрать фото</p>
                 </div>
             </div>
-            
+
             <!-- Результат -->
             <div id="portrait-result" class="card hidden">
                 <img id="portrait-photo-preview" class="photo-preview" alt="Твоё фото">
-                
+
                 <div class="compliment-box">
                     <p class="compliment-text" id="portrait-compliment-text"></p>
                 </div>
-                
+
                 <div class="btn-group">
                     <button class="btn btn-secondary" onclick="app.backToStudio()">
                         🔄 Другая локация
@@ -119,32 +154,32 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- РАБОЧАЯ ЗОНА ОРГАНИЗАТОРА -->
         <section id="organizer-section" class="content-section hidden">
             <button class="back-button" onclick="app.backToStudio()">
                 ← Вернуться в студию
             </button>
-            
+
             <!-- Загрузка фото -->
             <div id="organizer-upload" class="card">
                 <h2 class="section-title">Кадр "я — организатор"</h2>
                 <p class="section-text" id="organizer-intro-text"></p>
-                
+
                 <div class="upload-area" onclick="app.triggerFileUpload()">
                     <div class="upload-icon">📤</div>
                     <p class="upload-text">Нажми, чтобы выбрать фото</p>
                 </div>
             </div>
-            
+
             <!-- Результат -->
             <div id="organizer-result" class="card hidden">
                 <img id="organizer-photo-preview" class="photo-preview" alt="Твоё фото">
-                
+
                 <div class="compliment-box">
                     <p class="compliment-text" id="organizer-compliment-text"></p>
                 </div>
-                
+
                 <div class="btn-group">
                     <button class="btn btn-secondary" onclick="app.backToStudio()">
                         🔄 Другая локация
@@ -152,18 +187,18 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- СВАДЕБНАЯ ЛОКАЦИЯ -->
         <section id="wedding-section" class="content-section hidden">
             <button class="back-button" onclick="app.backToStudio()">
                 ← Вернуться в студию
             </button>
-            
+
             <!-- Выбор типа свадьбы -->
             <div id="wedding-question" class="card">
                 <h2 class="section-title">Свадебная мечта</h2>
                 <p class="section-text" id="wedding-question-text"></p>
-                
+
                 <div class="btn-group">
                     <button class="btn btn-primary" onclick="app.selectWeddingType('intimate')">
                         Камерная и ламповая
@@ -176,17 +211,17 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Подсказки -->
             <div id="wedding-tips" class="card hidden">
                 <h2 class="section-title">Идея для кадра</h2>
                 <p class="section-text" id="wedding-tips-text"></p>
-                
+
                 <button class="btn btn-primary" onclick="app.showWeddingUpload()">
                     📤 Готова загрузить фото
                 </button>
             </div>
-            
+
             <!-- Загрузка фото -->
             <div id="wedding-upload" class="card hidden">
                 <div class="upload-area" onclick="app.triggerFileUpload()">
@@ -194,17 +229,17 @@
                     <p class="upload-text">Нажми, чтобы выбрать фото</p>
                 </div>
             </div>
-            
+
             <!-- Результат -->
             <div id="wedding-result" class="card hidden">
                 <img id="wedding-photo-preview" class="photo-preview" alt="Твоё фото">
-                
+
                 <div class="compliment-box">
                     <p class="compliment-text" id="wedding-compliment-text"></p>
                 </div>
-                
+
                 <p class="section-text text-center" id="wedding-final-message"></p>
-                
+
                 <div class="btn-group">
                     <button class="btn btn-secondary" onclick="app.backToStudio()">
                         🔄 Другая локация
@@ -212,32 +247,32 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- ЗОНА КОМПЛИМЕНТОВ -->
         <section id="compliment-section" class="content-section hidden">
             <button class="back-button" onclick="app.backToStudio()">
                 ← Вернуться в студию
             </button>
-            
+
             <!-- Загрузка фото -->
             <div id="compliment-upload" class="card">
                 <h2 class="section-title">Просто комплимент</h2>
                 <p class="section-text" id="compliment-intro-text"></p>
-                
+
                 <div class="upload-area" onclick="app.triggerFileUpload()">
                     <div class="upload-icon">📤</div>
                     <p class="upload-text">Нажми, чтобы выбрать фото</p>
                 </div>
             </div>
-            
+
             <!-- Результат -->
             <div id="compliment-result" class="card hidden">
                 <img id="compliment-photo-preview" class="photo-preview" alt="Твоё фото">
-                
+
                 <div class="compliment-box">
                     <p class="compliment-text" id="compliment-compliment-text"></p>
                 </div>
-                
+
                 <div class="btn-group">
                     <button class="btn btn-secondary" onclick="app.backToStudio()">
                         🔄 Другая локация
@@ -245,12 +280,12 @@
                 </div>
             </div>
         </section>
-        
+
     </div>
-    
+
     <!-- Скрытый input для загрузки файлов -->
     <input type="file" id="photoInput" accept="image/*" style="display: none;">
-    
+
     <!-- Scripts -->
     <script src="js/messages.js"></script>
     <script src="js/app.js"></script>
@@ -261,7 +296,7 @@
             document.getElementById('welcome-title').textContent = MESSAGES.welcome.title;
             document.getElementById('welcome-text').textContent = MESSAGES.welcome.text;
             document.getElementById('welcome-footer').innerHTML = MESSAGES.welcome.footer + ' <span class="footer-heart">💕</span>';
-            
+
             // Locations
             document.getElementById('loc-portrait-title').textContent = MESSAGES.locations.portrait.title;
             document.getElementById('loc-portrait-desc').textContent = MESSAGES.locations.portrait.description;
@@ -271,20 +306,21 @@
             document.getElementById('loc-wedding-desc').textContent = MESSAGES.locations.wedding.description;
             document.getElementById('loc-compliment-title').textContent = MESSAGES.locations.compliment.title;
             document.getElementById('loc-compliment-desc').textContent = MESSAGES.locations.compliment.description;
-            
+
             // Portrait
             document.getElementById('portrait-question-text').textContent = MESSAGES.portrait.question;
-            
+
             // Organizer
             document.getElementById('organizer-intro-text').textContent = MESSAGES.organizer.intro;
-            
+
             // Wedding
             document.getElementById('wedding-question-text').textContent = MESSAGES.wedding.question;
             document.getElementById('wedding-final-message').textContent = MESSAGES.wedding.finalMessage;
-            
+
             // Compliment
             document.getElementById('compliment-intro-text').textContent = MESSAGES.compliment.intro;
         });
     </script>
 </body>
+
 </html>
